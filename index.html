@@ -9,6 +9,8 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<script src="https://js.stripe.com/v3/"></script>
+
 <style>
 body {
     background: #111;
@@ -20,10 +22,14 @@ body {
 .navbar {
     background: black;
     color: white;
+    padding: 0.25rem 0;
 }
 
 .navbar .navbar-brand {
     color: white;
+    width: 171px;
+    height: 172px;
+    padding: 0;
 }
 
 .btn-cart {
@@ -124,8 +130,10 @@ body {
 
 <!-- Navbar -->
 <nav class="navbar navbar-dark">
-<div class="container d-flex justify-content-between align-items-center">
-    <span class="navbar-brand">LuxeDecants</span>
+<div class="container d-flex align-items-center">
+    <div class="flex-grow-1 text-center">
+        <img src="images/logo.png" alt="LuxeDecants Logo" class="navbar-brand">
+    </div>
     <button class="btn-cart" onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
 </div>
 </nav>
@@ -136,6 +144,7 @@ body {
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
     <p class="total">Total: $<span id="cart-total">0</span></p>
+    <button id="checkout-btn" onclick="checkout()" style="background: white; color: black; padding: 10px 20px; border: none; cursor: pointer;">Checkout</button>
 </div>
 
 <!-- Products Grid -->
@@ -221,7 +230,12 @@ body {
 let cart = [];
 
 function addToCart(name, price, image){
-    cart.push({name, price, image});
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({name, price, image, quantity: 1});
+    }
     updateCart();
 }
 
@@ -238,12 +252,33 @@ function updateCart(){
         img.style.objectFit = "cover";
         img.style.marginRight = "10px";
         li.appendChild(img);
-        li.appendChild(document.createTextNode(item.name + " - $" + item.price.toFixed(2)));
+        li.appendChild(document.createTextNode(`${item.name} - $${item.price.toFixed(2)} x ${item.quantity}`));
         cartList.appendChild(li);
-        total += item.price;
+        total += item.price * item.quantity;
     });
     document.getElementById("cart-total").textContent = total.toFixed(2);
-    document.getElementById("cart-count").textContent = cart.length;
+    document.getElementById("cart-count").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+async function checkout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+    try {
+        const response = await fetch('http://localhost:3000/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ items: cart }),
+        });
+        const { url } = await response.json();
+        window.location = url;
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+    }
 }
 
 // Toggle full-screen cart overlay
