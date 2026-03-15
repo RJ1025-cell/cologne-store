@@ -143,7 +143,7 @@ body {
     <button class="close-btn" onclick="toggleCart()">✖</button>
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
-    <p class="total">Total: $<span id="cart-total">0</span></p>
+    <p class="total">Total (incl. $5 shipping): $<span id="cart-total">0</span></p>
     <button id="checkout-btn" onclick="checkout()" style="background: white; color: black; padding: 10px 20px; border: none; cursor: pointer;">Checkout</button>
 </div>
 
@@ -239,11 +239,25 @@ function addToCart(name, price, image){
     updateCart();
 }
 
+function addItem(index) {
+    cart[index].quantity += 1;
+    updateCart();
+}
+
+function removeItem(index) {
+    if (cart[index].quantity > 1) {
+        cart[index].quantity -= 1;
+    } else {
+        cart.splice(index, 1);
+    }
+    updateCart();
+}
+
 function updateCart(){
     const cartList = document.getElementById("cart-items");
     cartList.innerHTML = "";
     let total = 0;
-    cart.forEach(item => {
+    cart.forEach((item, index) => {
         const li = document.createElement("li");
         const img = document.createElement("img");
         img.src = item.image;
@@ -253,9 +267,20 @@ function updateCart(){
         img.style.marginRight = "10px";
         li.appendChild(img);
         li.appendChild(document.createTextNode(`${item.name} - $${item.price.toFixed(2)} x ${item.quantity}`));
+        const plusBtn = document.createElement("button");
+        plusBtn.textContent = "+";
+        plusBtn.onclick = () => addItem(index);
+        plusBtn.style.marginLeft = "10px";
+        li.appendChild(plusBtn);
+        const minusBtn = document.createElement("button");
+        minusBtn.textContent = "-";
+        minusBtn.onclick = () => removeItem(index);
+        minusBtn.style.marginLeft = "5px";
+        li.appendChild(minusBtn);
         cartList.appendChild(li);
         total += item.price * item.quantity;
     });
+    total += 5; // Flat rate shipping
     document.getElementById("cart-total").textContent = total.toFixed(2);
     document.getElementById("cart-count").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
 }
