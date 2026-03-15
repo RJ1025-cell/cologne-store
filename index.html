@@ -149,7 +149,7 @@ body {
 <div class="card-body">
 <h5>Valentino Coral Fantasy</h5>
 <p class="price">$5.00</p>
-<button class="btn btn-buy w-100" onclick="addToCart('Valentino Coral Fantasy',5.00)">Add to Cart</button>
+<button class="btn btn-buy w-100" onclick="addToCart('Valentino Coral Fantasy',5.00,'images/cologne1.jpg')">Add to Cart</button>
 </div>
 </div>
 </div>
@@ -161,7 +161,7 @@ body {
 <div class="card-body">
 <h5>Jean Paul Gaultier Le Male Le Parfum</h5>
 <p class="price">$4.57</p>
-<button class="btn btn-buy w-100" onclick="addToCart('Jean Paul Gaultier Le Male Le Parfum',4.57)">Add to Cart</button>
+<button class="btn btn-buy w-100" onclick="addToCart('Jean Paul Gaultier Le Male Le Parfum',4.57,'images/cologne2.jpg')">Add to Cart</button>
 </div>
 </div>
 </div>
@@ -173,7 +173,7 @@ body {
 <div class="card-body">
 <h5>Supremacy Collector's Edition</h5>
 <p class="price">$4.22</p>
-<button class="btn btn-buy w-100" onclick="addToCart('Supremacy Collector\'s Edition',4.22)">Add to Cart</button>
+<button class="btn btn-buy w-100" onclick="addToCart('Supremacy Collector\'s Edition',4.22,'images/cologne3.jpg')">Add to Cart</button>
 </div>
 </div>
 </div>
@@ -185,7 +185,7 @@ body {
 <div class="card-body">
 <h5>French Avenue Liquid Brun</h5>
 <p class="price">$6.00</p>
-<button class="btn btn-buy w-100" onclick="addToCart('French Avenue Liquid Brun',6.00)">Add to Cart</button>
+<button class="btn btn-buy w-100" onclick="addToCart('French Avenue Liquid Brun',6.00,'images/cologne4.jpg')">Add to Cart</button>
 </div>
 </div>
 </div>
@@ -197,7 +197,7 @@ body {
 <div class="card-body">
 <h5>Jean Paul Gaultier Le Beau</h5>
 <p class="price">$7.50</p>
-<button class="btn btn-buy w-100" onclick="addToCart('Jean Paul Gaultier Le Beau',7.50)">Add to Cart</button>
+<button class="btn btn-buy w-100" onclick="addToCart('Jean Paul Gaultier Le Beau',7.50,'images/cologne5.jpg')">Add to Cart</button>
 </div>
 </div>
 </div>
@@ -209,7 +209,7 @@ body {
 <div class="card-body">
 <h5>Game Of Spades Wildcard</h5>
 <p class="price">$4.28</p>
-<button class="btn btn-buy w-100" onclick="addToCart('Game Of Spades Wildcard',4.28)">Add to Cart</button>
+<button class="btn btn-buy w-100" onclick="addToCart('Game Of Spades Wildcard',4.28,'images/cologne6.jpg')">Add to Cart</button>
 </div>
 </div>
 </div>
@@ -220,8 +220,8 @@ body {
 <script>
 let cart = [];
 
-function addToCart(name, price){
-    cart.push({name, price});
+function addToCart(name, price, image){
+    cart.push({name, price, image});
     updateCart();
 }
 
@@ -231,7 +231,14 @@ function updateCart(){
     let total = 0;
     cart.forEach(item => {
         const li = document.createElement("li");
-        li.textContent = item.name + " - $" + item.price.toFixed(2);
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.style.width = "50px";
+        img.style.height = "50px";
+        img.style.objectFit = "cover";
+        img.style.marginRight = "10px";
+        li.appendChild(img);
+        li.appendChild(document.createTextNode(item.name + " - $" + item.price.toFixed(2)));
         cartList.appendChild(li);
         total += item.price;
     });
