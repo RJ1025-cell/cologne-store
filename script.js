@@ -1,15 +1,31 @@
 let cart = [];
 
 function addToCart(name, price, image = '') {
-    cart.push({ name, price, image, id: Date.now() });
+    const existingItem = cart.find(item => item.name === name && item.price === price);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name, price, image, id: Date.now(), quantity: 1 });
+    }
     displayCart();
-    // Show success feedback
     showCartFeedback();
 }
 
 function removeFromCart(itemId) {
     cart = cart.filter(item => item.id !== itemId);
     displayCart();
+}
+
+function updateQuantity(itemId, change) {
+    const item = cart.find(item => item.id === itemId);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            removeFromCart(itemId);
+        } else {
+            displayCart();
+        }
+    }
 }
 
 function showCartFeedback() {
@@ -36,18 +52,24 @@ function displayCart() {
     cartList.innerHTML = "";
     let subtotal = 0;
     
-    cart.forEach((item, index) => {
+    cart.forEach((item) => {
         let li = document.createElement("li");
         li.className = "cart-item";
+        const itemTotal = item.price * item.quantity;
         li.innerHTML = `
             <div class="cart-item-info">
                 <div class="cart-item-name">${item.name}</div>
-                <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                <div class="cart-item-price">$${itemTotal.toFixed(2)} (${item.quantity}x)</div>
+            </div>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                <span class="qty-display">${item.quantity}</span>
+                <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
             </div>
             <button class="cart-item-remove" onclick="removeFromCart(${item.id})">Remove</button>
         `;
         cartList.appendChild(li);
-        subtotal += item.price;
+        subtotal += itemTotal;
     });
     
     const total = subtotal + 5; // $5 shipping
