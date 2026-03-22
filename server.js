@@ -56,8 +56,8 @@ app.post('/create-checkout-session', async (req, res) => {
           },
         },
       ],
-      success_url: 'http://localhost:3000/success.html',
-      cancel_url: 'http://localhost:3000/index.html',
+      success_url: `${req.protocol}://${req.get('host')}/success.html`,
+      cancel_url: `${req.protocol}://${req.get('host')}/index.html`,
     });
 
     res.json({ url: session.url });
