@@ -227,7 +227,7 @@ body {
 </div>
 
 <script>
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function addToCart(name, price, image){
     const existingItem = cart.find(item => item.name === name);
@@ -254,6 +254,7 @@ function removeItem(index) {
 }
 
 function updateCart(){
+    localStorage.setItem('cart', JSON.stringify(cart));
     const cartList = document.getElementById("cart-items");
     cartList.innerHTML = "";
     let total = 0;
