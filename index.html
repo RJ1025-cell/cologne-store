@@ -208,33 +208,173 @@ body {
     box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
 }
 
-#cart-overlay ul {
+#cart-overlay {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#cart-items {
     list-style: none;
     padding: 0;
+    margin: 40px auto;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cart-item {
+    background: linear-gradient(135deg, #1c1c2e 0%, #2d1b4e 100%);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.1);
+}
+
+.cart-item:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+    box-shadow: 0 12px 35px rgba(212, 175, 55, 0.2);
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.cart-item-price {
+    font-size: 1.2em;
+    color: #d4af37;
+    font-weight: 700;
+}
+
+.cart-item-remove {
+    background: none;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #d4af37;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-left: 15px;
+}
+
+.cart-item-remove:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.6);
+    transform: scale(1.05);
+}
+
+#cart-summary {
+    max-width: 700px;
+    margin: 40px auto;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.1) 100%);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+}
+
+.total-label {
+    font-size: 16px;
+    color: #ccc;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#cart-total {
+    font-size: 3em;
+    font-weight: 700;
+    background: linear-gradient(45deg, #d4af37, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#checkout-btn {
+    background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    color: #000 !important;
+    padding: 14px 40px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    margin-top: 20px !important;
+}
+
+#checkout-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+#checkout-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+#checkout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4) !important;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.5em;
+    color: #aaa;
+}
+
+.empty-cart p {
     margin-bottom: 20px;
 }
 
-#cart-overlay li {
-    padding: 10px 0;
-    border-bottom: 1px solid #333;
-    font-size: 18px;
-}
-
-#cart-overlay p.total {
-    text-align: right;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-#cart-overlay .close-btn {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 28px;
-    background: none;
+.empty-cart .btn-shop {
+    background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    color: #000;
+    padding: 12px 30px;
     border: none;
-    color: white;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.empty-cart .btn-shop:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
 }
 
 </style>
@@ -257,8 +397,11 @@ body {
     <button class="close-btn" onclick="toggleCart()">✖</button>
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
-    <p class="total">Total (incl. $5 shipping): $<span id="cart-total">0</span></p>
-    <button id="checkout-btn" onclick="checkout()" style="background: white; color: black; padding: 10px 20px; border: none; cursor: pointer;">Checkout</button>
+    <div id="cart-summary">
+        <div class="total-label">Order Total (incl. $5 shipping)</div>
+        <div>$<span id="cart-total">0.00</span></div>
+        <button id="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    </div>
 </div>
 
 <!-- Products Grid -->
