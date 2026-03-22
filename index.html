@@ -227,7 +227,16 @@ body {
 </div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let cart = [];
+try {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+        cart = JSON.parse(storedCart);
+    }
+} catch (error) {
+    console.error('Error loading cart from localStorage:', error);
+    localStorage.removeItem('cart'); // Clear corrupted data
+}
 updateCart(); // Initialize cart display on page load
 
 function addToCart(name, price, image){
