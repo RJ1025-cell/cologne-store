@@ -228,6 +228,7 @@ body {
 
 <script>
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+updateCart(); // Initialize cart display on page load
 
 function addToCart(name, price, image){
     const existingItem = cart.find(item => item.name === name);
