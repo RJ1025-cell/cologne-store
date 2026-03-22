@@ -256,7 +256,7 @@ body {
     font-size: 1.1em;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #d4af37;
+    color: #d4af37 !important;
 }
 
 .cart-item-price {
@@ -362,10 +362,14 @@ body {
     background-clip: text;
 }
 
+.total-amount * {
+    font-size: inherit;
+}
+
 #cart-total {
-    font-size: 3em;
+    font-size: inherit;
     font-weight: 700;
-    background: linear-gradient(45deg, #d4af37, #ffd700);
+    background: inherit;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
