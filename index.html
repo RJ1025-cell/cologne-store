@@ -16,17 +16,24 @@
 <script src="https://js.stripe.com/v3"></script>
 
 <style>
-body {
-    background: #111;
-    color: white;
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+    color: white;
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .navbar {
-    background: black;
+    background: linear-gradient(135deg, #000 0%, #1a0033 100%);
     color: white;
-    padding: 0.25rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid #d4af37;
+    box-shadow: 0 8px 32px rgba(212, 175, 55, 0.1);
 }
 
 .navbar .navbar-brand {
@@ -34,48 +41,126 @@ body {
     width: 171px;
     height: 172px;
     padding: 0;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
 }
 
 .btn-cart {
-    background: none;
+    background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    color: #000;
     border: none;
-    color: white;
     font-size: 1.2rem;
     cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
 }
 
 .card {
-    background: #1c1c1c;
-    border: none;
-    transition: 0.3s;
+    background: linear-gradient(135deg, #1c1c2e 0%, #2d1b4e 100%);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
     color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+    transition: left 0.5s;
+    z-index: 10;
+}
+
+.card:hover::before {
+    left: 100%;
 }
 
 .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(212, 175, 55, 0.25), 0 2px 8px rgba(0, 0, 0, 0.6);
+    border-color: rgba(212, 175, 55, 0.5);
 }
 
 .card img {
     height: 300px;
     object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.card:hover img {
+    transform: scale(1.08);
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.card-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 
 .price {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
+    font-size: 26px;
+    font-weight: 700;
+    margin: 15px 0;
+    background: linear-gradient(45deg, #d4af37, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .btn-buy {
-    background: white;
-    color: black;
-    font-weight: bold;
+    background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-buy::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-buy:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .btn-buy:hover {
-    background: #ddd;
-    color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
 }
 
 /* Full-screen cart overlay */
@@ -86,16 +171,41 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(20, 20, 20, 0.95);
+    background: linear-gradient(135deg, rgba(15, 15, 15, 0.98) 0%, rgba(26, 26, 46, 0.98) 100%);
     color: white;
     z-index: 9999;
     overflow-y: auto;
     padding: 50px 20px;
+    backdrop-filter: blur(10px);
 }
 
 #cart-overlay h2 {
     text-align: center;
     margin-bottom: 30px;
+    font-size: 2.5em;
+    background: linear-gradient(45deg, #d4af37, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.close-btn {
+    background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
 }
 
 #cart-overlay ul {
