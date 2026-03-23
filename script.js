@@ -62,9 +62,9 @@ function displayCart() {
                 <div class="cart-item-price">$${itemTotal.toFixed(2)} (${item.quantity}x)</div>
             </div>
             <div class="qty-controls">
-                <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)" style="background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%) !important; color: #000 !important; padding: 14px 40px !important; border-radius: 8px !important; border: none !important; cursor: pointer !important; font-weight: 700 !important; font-size: 16px !important; text-transform: uppercase !important; letter-spacing: 1px !important;">−</button>
                 <span class="qty-display">${item.quantity}</span>
-                <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)" style="background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%) !important; color: #000 !important; padding: 14px 40px !important; border-radius: 8px !important; border: none !important; cursor: pointer !important; font-weight: 700 !important; font-size: 16px !important; text-transform: uppercase !important; letter-spacing: 1px !important;">+</button>
             </div>
             <button class="cart-item-remove" onclick="removeFromCart(${item.id})">Remove</button>
         `;
