@@ -1,6 +1,10 @@
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
+});
+
 const express = require('express');
 const cors = require('cors');
-const stripe = require('stripe')('sk_test_51TBGq6E11JSM1MhDwvHP32Hi9rPv8SISwFFu6m8TwJVhzaLX2mpXCVEda24gq4KKOROXLcXmIncClQObiKIOUz0o00oTUMPoM5'); // Replace with your secret key
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(cors());
@@ -71,4 +75,4 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(process.env.PORT || 3000, () => console.log(`Server running on port ${process.env.PORT || 3000}`));
