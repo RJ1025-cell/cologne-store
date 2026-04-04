@@ -41,11 +41,12 @@ function displayCart() {
     let totalElement = document.getElementById("cart-total");
     let countElement = document.getElementById("cart-count");
     
-    countElement.textContent = cart.length;
+    countElement.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
     
     if (cart.length === 0) {
         cartList.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p><button class="btn-shop" onclick="toggleCart()">Continue Shopping</button></div>';
-        totalElement.textContent = '5.00';
+        totalElement.textContent = '0.00';
+        document.getElementById("cart-upsell").style.display = 'none';
         return;
     }
     
@@ -72,7 +73,20 @@ function displayCart() {
         subtotal += itemTotal;
     });
     
-    const total = subtotal + 2; // $2 shipping
+    const shipping = subtotal >= 40 ? 0 : 5;
+    const total = subtotal + shipping;
+    const upsellDiv = document.getElementById("cart-upsell");
+    const upsellMessage = document.getElementById("upsell-message");
+    if (subtotal >= 40) {
+        upsellMessage.textContent = "You've earned free shipping!";
+        upsellDiv.style.display = 'block';
+    } else if (subtotal > 0) {
+        const amountNeeded = (40 - subtotal).toFixed(2);
+        upsellMessage.textContent = `You only need $${amountNeeded} more for free shipping!`;
+        upsellDiv.style.display = 'block';
+    } else {
+        upsellDiv.style.display = 'none';
+    }
     totalElement.textContent = total.toFixed(2);
 }
 

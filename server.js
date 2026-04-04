@@ -14,6 +14,11 @@ app.get('/', (req, res) => {
 app.post('/create-checkout-session', async (req, res) => {
   const { items } = req.body;
 
+  let subtotal = 0;
+  items.forEach(item => {
+    subtotal += item.price * (item.quantity || 1);
+  });
+
   const lineItems = items.map(item => ({
     price_data: {
       currency: 'usd',
@@ -39,10 +44,10 @@ app.post('/create-checkout-session', async (req, res) => {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: {
-              amount: 200, // $2.00 in cents
+              amount: subtotal >= 40 ? 0 : 500, // Free shipping over $40
               currency: 'usd',
             },
-            display_name: 'Standard Shipping',
+            display_name: subtotal >= 40 ? 'Free Shipping' : 'Standard Shipping',
             delivery_estimate: {
               minimum: {
                 unit: 'business_day',

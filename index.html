@@ -254,6 +254,64 @@ body {
     box-shadow: 0 12px 35px rgba(212, 175, 55, 0.5);
 }
 
+.banner-card {
+    max-width: 700px;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 215, 0, 0.7);
+    background: linear-gradient(135deg, #2b153a 0%, #481f6f 100%);
+}
+
+.banner-card:hover {
+    border: 1px solid rgba(255, 215, 0, 0.9);
+}
+
+.banner-card .card-body {
+    padding: 24px;
+}
+
+.bundle-pricing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0 0;
+    flex-wrap: wrap;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 1.2rem;
+}
+
+.bundle-discount {
+    color: #ffd700;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+}
+
+.bundle-collage {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 20px auto 0;
+    max-width: 720px;
+}
+
+.bundle-collage img {
+    width: 100%;
+    height: 90px;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 0.9px solid rgba(255, 255, 255, 0.08);
+}
+
+.banner-card:hover .bundle-collage img {
+    transform: none;
+}
+
 /* Full-screen cart overlay */
 #cart-overlay {
     display: none;
@@ -351,6 +409,58 @@ body {
 .empty-cart .btn-shop:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 35px rgba(212, 175, 55, 0.5);
+}
+
+#cart-upsell {
+    margin: 20px 0;
+    text-align: center;
+}
+
+#upsell-message {
+    font-size: 1.2em;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.upsell-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.upsell-card {
+    background: linear-gradient(135deg, #1c1c2e 0%, #2d1b4e 100%);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.upsell-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(212, 175, 55, 0.6);
+}
+
+.upsell-card img {
+    width: 100%;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.upsell-card h6 {
+    font-size: 0.8em;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.upsell-card .btn {
+    padding: 6px 12px;
+    font-size: 0.8em;
 }
 
 .cart-item {
@@ -473,6 +583,44 @@ body {
     animation: fadeInUp 0.6s ease 0.3s backwards;
 }
 
+.cart-items-card {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.12) 100%);
+    border: 2px solid rgba(212, 175, 55, 0.4);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 15px 50px rgba(212, 175, 55, 0.15);
+    animation: fadeInUp 0.6s ease 0.3s backwards;
+    min-height: 500px;
+}
+
+.cart-items-card h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffd700;
+    font-size: 1.4em;
+}
+
+.upsell-section {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.12) 100%);
+    border: 2px solid rgba(212, 175, 55, 0.4);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 15px 50px rgba(212, 175, 55, 0.15);
+    animation: fadeInUp 0.6s ease 0.3s backwards;
+    min-height: 500px;
+}
+
+.upsell-section h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffd700;
+    font-size: 1.4em;
+}
+
+#cart-items {
+    margin-top: 0;
+}
+
 .total-label {
     font-size: 14px;
     color: #bbb;
@@ -556,6 +704,19 @@ body {
     color: #ffd700;
 }
 
+.cart-content {
+    display: flex;
+    gap: 20px;
+}
+
+.cart-left {
+    flex: 1;
+}
+
+.cart-right {
+    flex: 1;
+}
+
 </style>
 </head>
 
@@ -575,7 +736,52 @@ body {
 <div id="cart-overlay">
     <button class="close-btn" onclick="toggleCart()">✖</button>
     <h2>Your Cart</h2>
-    <ul id="cart-items"></ul>
+    <div class="cart-content">
+        <div class="cart-left">
+            <div class="cart-items-card">
+                <h3>Your Items</h3>
+                <ul id="cart-items"></ul>
+            </div>
+        </div>
+        <div class="cart-right">
+            <div id="cart-upsell" style="display: none;" class="upsell-section">
+                <h3>Free Shipping</h3>
+                <p id="upsell-message"></p>
+                <div class="upsell-products">
+                    <div class="upsell-card">
+                        <img src="images/luxe_fantasy.png" alt="Luxe Fantasy">
+                        <h6>Luxe Fantasy-5ml</h6>
+                        <button class="btn btn-sm btn-buy" onclick="addToCart('Luxe Fantasy-5ml',9.42,'images/luxe_fantasy.png'); updateCart();">$9.42</button>
+                    </div>
+                    <div class="upsell-card">
+                        <img src="images/Luxe_Le_Male_Le_Parfum.png" alt="Le Male Le Parfum">
+                        <h6>Luxe Decants Le Male Le Parfum-5ml</h6>
+                        <button class="btn btn-sm btn-buy" onclick="addToCart('Luxe Decants Le Male Le Parfum-5ml',7.60,'images/Luxe_Le_Male_Le_Parfum.png'); updateCart();">$7.60</button>
+                    </div>
+                    <div class="upsell-card">
+                        <img src="images/Luxe_Collectors_Edition.png" alt="Collector's Edition">
+                        <h6>Luxe Collector's Edition-5ml</h6>
+                        <button class="btn btn-sm btn-buy" onclick="addToCart('Luxe Collector\'s Edition',5.17,'images/Luxe_Collectors_Edition.png'); updateCart();">$5.17</button>
+                    </div>
+                    <div class="upsell-card">
+                        <img src="images/luxe_brun.png" alt="Luxe Brun">
+                        <h6>Luxe Brun-5ml</h6>
+                        <button class="btn btn-sm btn-buy" onclick="addToCart('Luxe Brun-5ml',3.72,'images/luxe_brun.png'); updateCart();">$3.72</button>
+                    </div>
+                    <div class="upsell-card">
+                        <img src="images/Luxe_Le_Beau_Le_Parfum.png" alt="Le Beau Le Parfum">
+                        <h6>Luxe Decants Le Beau-5ml</h6>
+                        <button class="btn btn-sm btn-buy" onclick="addToCart('Luxe Decants Le Beau-5ml',7.78,'images/Luxe_Le_Beau_Le_Parfum.png'); updateCart();">$7.78</button>
+                    </div>
+                    <div class="upsell-card">
+                        <img src="images/Luxe_Wildcard.png" alt="Luxe Wildcard">
+                        <h6>Luxe Wildcard-5ml</h6>
+                        <button class="btn btn-sm btn-buy" onclick="addToCart('Luxe Wildcard-5ml',5.83,'images/Luxe_Wildcard.png'); updateCart();">$5.83</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="cart-summary">
         <div class="total-label">Order Total (incl. $2 shipping)</div>
         <div class="total-amount">$<span id="cart-total">0.00</span></div>
@@ -586,6 +792,29 @@ body {
 <!-- Products Grid -->
 <div class="container mt-5">
 <div class="row g-4">
+
+<!-- Bundle Product -->
+<div class="col-12">
+<div class="card text-center p-4 banner-card">
+<div class="card-body">
+<h5 class="card-title">Decant Variety Pack</h5>
+<p class="bundle-discount">bundle discount</p>
+<div class="bundle-collage">
+<img src="images/luxe_fantasy.png" alt="Luxe Fantasy">
+<img src="images/Luxe_Le_Male_Le_Parfum.png" alt="Le Male Le Parfum">
+<img src="images/Luxe_Collectors_Edition.png" alt="Collector's Edition">
+<img src="images/luxe_brun.png" alt="Luxe Brun">
+<img src="images/Luxe_Le_Beau_Le_Parfum.png" alt="Le Beau Le Parfum">
+<img src="images/Luxe_Wildcard.png" alt="Luxe Wildcard">
+</div>
+<div class="bundle-pricing">
+<span class="original-price">$40</span>
+<span class="price">$35</span>
+</div>
+<button class="btn btn-buy w-100" onclick="addToCart('Decant Variety Pack',35,'images/Bundle_Cart_Image.jpg')">Add to Cart</button>
+</div>
+</div>
+</div>
 
 <!-- Product 1 -->
 <div class="col-lg-4 col-md-6">
@@ -704,17 +933,17 @@ function updateCart(){
     const cartList = document.getElementById("cart-items");
     const totalLabel = document.querySelector(".total-label");
     cartList.innerHTML = "";
-    let total = 0;
+    let subtotal = 0;
     
     if (cart.length === 0) {
         cartList.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p><button class="btn-shop" onclick="toggleCart()">Continue Shopping</button></div>';
         document.getElementById("cart-total").textContent = '0.00';
         document.getElementById("cart-count").textContent = '0';
         totalLabel.textContent = 'Order Total';
+        document.getElementById("cart-upsell").style.display = 'none';
         return;
     }
     
-    totalLabel.textContent = 'Order Total (incl. $2 shipping)';
     cart.forEach((item, index) => {
         const li = document.createElement("li");
         const img = document.createElement("img");
@@ -758,9 +987,27 @@ function updateCart(){
         minusBtn.style.transition = "all 0.3s ease";
         li.appendChild(minusBtn);
         cartList.appendChild(li);
-        total += item.price * item.quantity;
+        subtotal += item.price * item.quantity;
     });
-    total += 2; // Flat rate shipping
+    const shipping = subtotal >= 40 ? 0 : 5;
+    const total = subtotal + shipping;
+    if (subtotal >= 40) {
+        totalLabel.textContent = 'Order Total (free shipping)';
+    } else {
+        totalLabel.textContent = 'Order Total (incl. $5 shipping)';
+    }
+    const upsellDiv = document.getElementById("cart-upsell");
+    const upsellMessage = document.getElementById("upsell-message");
+    if (subtotal >= 40) {
+        upsellMessage.textContent = "You've earned free shipping!";
+        upsellDiv.style.display = 'block';
+    } else if (subtotal > 0) {
+        const amountNeeded = (40 - subtotal).toFixed(2);
+        upsellMessage.textContent = `You only need $${amountNeeded} more for free shipping!`;
+        upsellDiv.style.display = 'block';
+    } else {
+        upsellDiv.style.display = 'none';
+    }
     document.getElementById("cart-total").textContent = total.toFixed(2);
     document.getElementById("cart-count").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
 }
