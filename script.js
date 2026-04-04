@@ -72,7 +72,7 @@ function displayCart() {
         subtotal += itemTotal;
     });
     
-    const total = subtotal + 5; // $5 shipping
+    const total = subtotal + 2; // $2 shipping
     totalElement.textContent = total.toFixed(2);
 }
 

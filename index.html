@@ -577,7 +577,7 @@ body {
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
     <div id="cart-summary">
-        <div class="total-label">Order Total (incl. $5 shipping)</div>
+        <div class="total-label">Order Total (incl. $2 shipping)</div>
         <div class="total-amount">$<span id="cart-total">0.00</span></div>
         <button id="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
     </div>
@@ -714,7 +714,7 @@ function updateCart(){
         return;
     }
     
-    totalLabel.textContent = 'Order Total (incl. $5 shipping)';
+    totalLabel.textContent = 'Order Total (incl. $2 shipping)';
     cart.forEach((item, index) => {
         const li = document.createElement("li");
         const img = document.createElement("img");
@@ -760,7 +760,7 @@ function updateCart(){
         cartList.appendChild(li);
         total += item.price * item.quantity;
     });
-    total += 5; // Flat rate shipping
+    total += 2; // Flat rate shipping
     document.getElementById("cart-total").textContent = total.toFixed(2);
     document.getElementById("cart-count").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
 }
